@@ -33,7 +33,7 @@ int main()
     kelvin kv;
     mole mo;
     candela c;
-    //using r = added_t<mole, candela>::type;
+    using r = added_units<mole, candela>;
     std::cout << "Hello World!\n";
 }
 

@@ -70,12 +70,17 @@ struct added<static_vector<LeftValues ...>, static_vector<RightValues ... >> {
 };
 
 template<typename TUnitLeft, typename TUnitRight>
-struct unit_added {};
+struct unit_added{};
 
-template<typename TUnit, int ... rf>
-struct unit_added<TUnit, static_vector<rf...>>
+template<typename TUnit,  int ... Right>
+struct unit_added <unit<TUnit, static_vector<Right ... >>, unit<TUnit, static_vector<Right ... > >>
 {
-    using type = unit < TUnit, typename added_t<static_vector<lf ... >, static_vector<rf ... >>::type>;
+    using type = unit < TUnit, typename added<static_vector<Right ... >, static_vector<Right ... >>::type>;
+};
+
+template<typename TUnit1, TUnit1 TEnum, typename TUnit2, TUnit2 TEnum>
+struct add_two{
+
 };
 template<typename TUnitLeft, typename TUnitRight>
 using added_units = typename unit_added<TUnitLeft, TUnitRight>::type;
