@@ -5,27 +5,7 @@
 #include "units.h"
 #include "tests_common.h"
 
-enum class my_units
-{
-    czk,
-    beer,
-    coffee,
-    absinth,
-    pizza,
-    chip,
-    baguette,
-    _count
-};
 
-using czk = basic_unit<my_units, my_units::czk>;
-using beer = basic_unit<my_units, my_units::beer>;
-using coffee = basic_unit<my_units, my_units::coffee>;
-using absinth = basic_unit<my_units, my_units::absinth>;
-using pizza = basic_unit<my_units, my_units::pizza>;
-using chip = basic_unit<my_units, my_units::chip>;
-using baguette = basic_unit<my_units, my_units::baguette>;
-
-using beer_price = divided_unit<beer, czk>;
 
 int main()
 {
@@ -33,29 +13,44 @@ int main()
     // (even with the same enum size)
 
     std::cout << std::is_same<
-        typename unit_traits<second>::enum_type,
-        typename unit_traits<metre>::enum_type
+        multiplied_unit<metre, metre, metre>,
+        multiplied_unit<metre, multiplied_unit<metre, metre>>
     >::value << std::endl;
 
     std::cout << std::is_same<
-        typename unit_traits<czk>::enum_type,
-        typename unit_traits<beer>::enum_type
+        multiplied_unit<metre, metre, metre>,
+        multiplied_unit<multiplied_unit<metre, metre>, metre>
+    >::value << std::endl;
+
+
+    using newton_direct =
+        divided_unit<
+        multiplied_unit<kilogram, metre>,
+        multiplied_unit<second, second>
+        >;
+
+    using newton_indirect =
+        multiplied_unit<
+        kilogram,
+        divided_unit<
+        divided_unit<metre, second>,
+        second
+        >
+        >;
+
+    std::cout << std::is_same<newton_direct, newton_indirect>::value << std::endl;
+
+    using scalar = divided_unit<second, second>;
+
+    std::cout << std::is_same<
+        multiplied_unit<metre, scalar>,
+        multiplied_unit<metre>
     >::value << std::endl;
 
     std::cout << std::is_same<
-        typename unit_traits<second>::enum_type,
-        typename unit_traits<beer>::enum_type
+        multiplied_unit<metre, scalar>,
+        multiplied_unit<scalar, metre>
     >::value << std::endl;
-
-    std::cout << std::is_same<
-        typename unit_traits<metre_per_second>::enum_type,
-        typename unit_traits<beer_price>::enum_type
-    >::value << std::endl;
-    
-    std::cout << is_addable<quantity<czk>, quantity<second>>::value << std::endl;
-    std::cout << is_subtractable<quantity<czk>, quantity<second>>::value << std::endl;
-    std::cout << is_multipliable<quantity<czk>, quantity<second>>::value << std::endl;
-    std::cout << is_divisible<quantity<czk>, quantity<second>>::value << std::endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

@@ -5,33 +5,6 @@ struct static_vector
 {};
 
 
-template <typename Vector, int Added>
-struct push_back
-{};
-
-template <int Added, int ... Values>
-struct push_back<static_vector<Values ...>, Added>
-{
-    using type = static_vector<Values ..., Added>;
-};
-
-
-template <typename Vector, size_t Index>
-struct at
-{};
-
-template <int Head, int ... Tail>
-struct at<static_vector<Head, Tail ...>, 0>
-{
-    static constexpr auto value = Head;
-};
-
-template <size_t Index, int Head, int ... Tail>
-struct at<static_vector<Head, Tail ...>, Index>
-{
-    static constexpr auto value = at<static_vector<Tail ...>, Index - 1>::value;
-};
-
 template<typename Vector, int Size, int Index>
 struct expanding_vector
 {};
@@ -114,7 +87,11 @@ template<typename Head, typename ... Tail>
 struct add_all
 {};
 
-
+template<typename SingleUnit>
+struct add_all<SingleUnit>
+{
+    using type = SingleUnit;
+};
 template<typename LastLeft, typename LastRight>
 struct add_all<LastLeft, LastRight>
 {
