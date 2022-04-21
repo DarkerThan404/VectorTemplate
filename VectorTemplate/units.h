@@ -133,17 +133,28 @@ using multiplied_unit = typename add_all<TFirstUnit, TOtherUnits ...>::type;
 template <typename TDividendUnit, typename TDivisorUnit>
 using divided_unit = typename unit_substract<TDividendUnit, TDivisorUnit>::type ;
 
-/*template<typename LeftVector, typename RightVector, typename ResultVector>
-struct sum 
-{};
-
-
-template<int Head1, int Head2, int ... Values1, int ... Values2, int ... Values3>
-struct sum<static_vector<Head1, Values1 ...>, static_vector<Head2, Values2 ... >, static_vector< Values3 ...>>
-{
+template <typename TUnit, typename TValue = double>
+struct quantity {
 private:
-    static constexpr auto left_value = Head1;
-    static constexpr auto right_value = Head2;
+    TValue value_;
 public:
-    using type = typename sum<static_vector<Values1 ...>, static_vector<Values2 ... >, typename push_back<static_vector<Values3 ...>, static_cast<int>(left_value + right_value)>::type >::type;
-};*/
+    explicit quantity(TValue value) : value_(value){}
+
+    TValue value() { return value_; }
+};
+
+template<typename TDividentUnit, typename TDivisorUnit>
+auto operator / (quantity<TDividentUnit> divident, quantity<TDivisorUnit> divisor) {
+    auto divident_value = divident.value();
+    auto divisor_value = divisor.value();
+    quantity < divided_unit<TDividentUnit, TDivisorUnit>> result(divident_value / divisor_value);
+    return result;
+}
+
+template<typename TUnit>
+auto operator + (quantity<TUnit> LeftOperand, quantity<TUnit> RightOperand) {
+    auto LeftOperand_ = LeftOperand.value();
+    auto RightOperand_ = RightOperand.value();
+    quantity < TUnit> result(LeftOperand_ + RightOperand_);
+    return result;
+}
