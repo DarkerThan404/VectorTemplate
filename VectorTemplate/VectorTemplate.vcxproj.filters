@@ -23,5 +23,8 @@
     <ClInclude Include="units.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tests_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,8 +3,9 @@
 
 #include <iostream>
 #include "units.h"
+#include "tests_common.h"
 
-enum class si_units
+/*enum class si_units
 {
     second,
     metre,
@@ -26,7 +27,7 @@ using candela = basic_unit<si_units, si_units::candela>;
 
 using metre_per_second = divided_unit<metre, second>;
 using cubic_metre = multiplied_unit<metre, metre, metre>;
-using newton = divided_unit<multiplied_unit<kilogram, metre>, multiplied_unit<second, second>>;
+using newton = divided_unit<multiplied_unit<kilogram, metre>, multiplied_unit<second, second>>;*/
 
 int main()
 {
@@ -40,8 +41,9 @@ int main()
 
     // Won't compile
     //std::cout << (l + t).value() << std::endl;
-    newton n;
-    std::cout << "Hello World!\n";
+    std::cout << is_addable<decltype(l), decltype(t)>::value << std::endl;
+    //newton n;
+    //std::cout << "Hello World!\n";
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
