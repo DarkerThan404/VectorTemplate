@@ -9,47 +9,67 @@
 
 int main()
 {
-    // It can't be possible to combine together units from different systems
-    // (even with the same enum size)
+    // Basic logic of quantity<...>
+
+    quantity<second> t(4.2);
+    quantity<second, int32_t> t_int32(42);
+
+    quantity<metre> l(666);
+
+    std::cout << t.value() << std::endl;
+    std::cout << t_int32.value() << std::endl;
 
     std::cout << std::is_same<
-        multiplied_unit<metre, metre, metre>,
-        multiplied_unit<metre, multiplied_unit<metre, metre>>
+        decltype(t.value()),
+        double
     >::value << std::endl;
 
     std::cout << std::is_same<
-        multiplied_unit<metre, metre, metre>,
-        multiplied_unit<multiplied_unit<metre, metre>, metre>
+        decltype(t_int32.value()),
+        int32_t
     >::value << std::endl;
 
-
-    using newton_direct =
-        divided_unit<
-        multiplied_unit<kilogram, metre>,
-        multiplied_unit<second, second>
-        >;
-
-    using newton_indirect =
-        multiplied_unit<
-        kilogram,
-        divided_unit<
-        divided_unit<metre, second>,
-        second
-        >
-        >;
-
-    std::cout << std::is_same<newton_direct, newton_indirect>::value << std::endl;
-
-    using scalar = divided_unit<second, second>;
+    std::cout << (t + t).value() << std::endl;
+    std::cout << (t - t).value() << std::endl;
+    std::cout << (l * t).value() << std::endl;
+    std::cout << (l / t).value() << std::endl;
 
     std::cout << std::is_same<
-        multiplied_unit<metre, scalar>,
-        multiplied_unit<metre>
+        decltype(t + t),
+        decltype(t)
     >::value << std::endl;
 
     std::cout << std::is_same<
-        multiplied_unit<metre, scalar>,
-        multiplied_unit<scalar, metre>
+        decltype(t - t),
+        decltype(t)
+    >::value << std::endl;
+
+    std::cout << std::is_same<
+        decltype(l* l* l),
+        cubic_metre
+    >::value << std::endl;
+
+    std::cout << std::is_same<
+        decltype(l / t),
+        metre_per_second
+    >::value << std::endl;
+
+    // Different units, types or scalar are not implicitly convertible
+
+
+    std::cout << std::is_convertible<
+        decltype(l),
+        decltype(t)
+    >::value << std::endl;
+
+    std::cout << std::is_convertible<
+        decltype(t),
+        decltype(t_int32)
+    >::value << std::endl;
+
+    std::cout << std::is_convertible<
+        decltype(l.value()),
+        decltype(l)
     >::value << std::endl;
 }
 
