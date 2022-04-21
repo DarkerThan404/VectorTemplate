@@ -95,6 +95,11 @@ struct unit_add < unit < SameEnum, static_vector<Left ...>>, unit < SameEnum, st
 template<typename LeftUnit, typename Rightunit>
 struct unit_substract {};
 
+/*template<typename Enum,typename TPowers, typename OtherEnum, typename OtherTPowers>
+struct unit_substract<unit<Enum, TPowers>, unit<OtherEnum, OtherTPowers>> {
+    using type = static_vector<>;
+};*/
+
 template<typename SameEnum, int ... Left, int ... Right>
 struct unit_substract < unit < SameEnum, static_vector<Left ...>>, unit < SameEnum, static_vector<Right ... >>> {
     using type = unit <
@@ -125,7 +130,13 @@ public:
     using type = typename add_all<SumHead, Tail ...>::type;
 };
 
+template<typename TDivident, typename TDivisor>
+struct divide{};
 
+template<typename SameUnit, int ... Divident , int ... Divisor>
+struct divide<unit<SameUnit, static_vector<Divident ... >>, unit<SameUnit, static_vector<Divisor ... >>> {
+    using type = typename substract<unit<SameUnit, static_vector<Divident ... >>, unit<SameUnit, static_vector<Divisor ... >>>::type;
+};
 
 template <typename TFirstUnit, typename ... TOtherUnits>
 using multiplied_unit = typename add_all<TFirstUnit, TOtherUnits ...>::type;
@@ -143,6 +154,14 @@ public:
     TValue value() { return value_; }
 };
 
+template<typename TMultiplier1, typename TMultiplier2>
+auto operator * (quantity<TMultiplier1> left, quantity<TMultiplier2> right) {
+    auto left = left.value();
+    auto right = right.value();
+    quantity < multiplied_unit<TMultiplier1, TMultiplier2>> result(left * right);
+    return result;
+}
+
 template<typename TDividentUnit, typename TDivisorUnit>
 auto operator / (quantity<TDividentUnit> divident, quantity<TDivisorUnit> divisor) {
     auto divident_value = divident.value();
@@ -156,5 +175,13 @@ auto operator + (quantity<TUnit> LeftOperand, quantity<TUnit> RightOperand) {
     auto LeftOperand_ = LeftOperand.value();
     auto RightOperand_ = RightOperand.value();
     quantity < TUnit> result(LeftOperand_ + RightOperand_);
+    return result;
+}
+
+template<typename TUnit>
+auto operator - (quantity<TUnit> LeftOperand, quantity<TUnit> RightOperand) {
+    auto LeftOperand_ = LeftOperand.value();
+    auto RightOperand_ = RightOperand.value();
+    quantity < TUnit> result(LeftOperand_ - RightOperand_);
     return result;
 }

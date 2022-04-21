@@ -5,45 +5,57 @@
 #include "units.h"
 #include "tests_common.h"
 
-/*enum class si_units
+enum class my_units
 {
-    second,
-    metre,
-    kilogram,
-    ampere,
-    kelvin,
-    mole,
-    candela,
+    czk,
+    beer,
+    coffee,
+    absinth,
+    pizza,
+    chip,
+    baguette,
     _count
 };
 
-using second = basic_unit<si_units, si_units::second>;
-using metre = basic_unit<si_units, si_units::metre>;
-using kilogram = basic_unit<si_units, si_units::kilogram>;
-using ampere = basic_unit<si_units, si_units::ampere>;
-using kelvin = basic_unit<si_units, si_units::kelvin>;
-using mole = basic_unit<si_units, si_units::mole>;
-using candela = basic_unit<si_units, si_units::candela>;
+using czk = basic_unit<my_units, my_units::czk>;
+using beer = basic_unit<my_units, my_units::beer>;
+using coffee = basic_unit<my_units, my_units::coffee>;
+using absinth = basic_unit<my_units, my_units::absinth>;
+using pizza = basic_unit<my_units, my_units::pizza>;
+using chip = basic_unit<my_units, my_units::chip>;
+using baguette = basic_unit<my_units, my_units::baguette>;
 
-using metre_per_second = divided_unit<metre, second>;
-using cubic_metre = multiplied_unit<metre, metre, metre>;
-using newton = divided_unit<multiplied_unit<kilogram, metre>, multiplied_unit<second, second>>;*/
+using beer_price = divided_unit<beer, czk>;
 
 int main()
 {
-    quantity<metre> l(2.1);
-    quantity<second> t(0.9);
-    auto v1(l / t);
+    // It can't be possible to combine together units from different systems
+    // (even with the same enum size)
 
-    quantity<metre_per_second> v2{ 2.5 };
+    /*std::cout << std::is_same<
+        typename unit_traits<second>::enum_type,
+        typename unit_traits<metre>::enum_type
+    >::value << std::endl;
 
-    std::cout << (v1 + v2).value() << std::endl;
+    std::cout << std::is_same<
+        typename unit_traits<czk>::enum_type,
+        typename unit_traits<beer>::enum_type
+    >::value << std::endl;
 
-    // Won't compile
-    //std::cout << (l + t).value() << std::endl;
-    std::cout << is_addable<decltype(l), decltype(t)>::value << std::endl;
-    //newton n;
-    //std::cout << "Hello World!\n";
+    std::cout << std::is_same<
+        typename unit_traits<second>::enum_type,
+        typename unit_traits<beer>::enum_type
+    >::value << std::endl;
+
+    std::cout << std::is_same<
+        typename unit_traits<metre_per_second>::enum_type,
+        typename unit_traits<beer_price>::enum_type
+    >::value << std::endl;
+    
+    std::cout << is_addable<quantity<czk>, quantity<second>>::value << std::endl;
+    std::cout << is_subtractable<quantity<czk>, quantity<second>>::value << std::endl;
+    std::cout << is_multipliable<quantity<czk>, quantity<second>>::value << std::endl;*/
+    std::cout << is_divisible<quantity<czk>, quantity<second>>::value << std::endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
