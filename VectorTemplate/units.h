@@ -62,32 +62,76 @@ using basic_unit = unit < TEnum, typename expanding_vector < static_vector<>, st
 
 
 template<typename LeftVector, typename RightVector>
-struct added;
+struct add;
 
 template<int ... LeftValues, int ... RightValues>
-struct added<static_vector<LeftValues ...>, static_vector<RightValues ... >> {
+struct add<static_vector<LeftValues ...>, static_vector<RightValues ... >> {
     using type = static_vector<(LeftValues + RightValues) ... >;
 };
 
+template<typename LeftVector, typename RightVector>
+struct substract;
 
-template<typename Unit>
-struct get_enum;
+template<int ... LeftValues, int ... RightValues>
+struct substract<static_vector<LeftValues ...>, static_vector<RightValues ... >> {
+    using type = static_vector<(LeftValues - RightValues) ... >;
+};
 
-template<typename TUnitLeft, typename TUnitRight>
-struct unit_added{};
+template<typename LeftUnit, typename Rightunit>
+struct unit_add {};
 
-template<typename TUnit,  int ... Right>
-struct unit_added <unit<TUnit, static_vector<Right ... >>, unit<TUnit, static_vector<Right ... > >>
+template<typename SameEnum, int ... Left, int ... Right>
+struct unit_add < unit < SameEnum, static_vector<Left ...>>, unit < SameEnum, static_vector<Right ... >>>{
+    //using type = unit < SameEnum, typename added<static_vector<Left ...>, static_vector<Right ...>>::type>>;
+    using type = unit <
+        SameEnum,
+        typename add<
+        static_vector<Left ... >,
+        static_vector<Right ... >
+        >::type
+    >;
+};
+
+template<typename LeftUnit, typename Rightunit>
+struct unit_substract {};
+
+template<typename SameEnum, int ... Left, int ... Right>
+struct unit_substract < unit < SameEnum, static_vector<Left ...>>, unit < SameEnum, static_vector<Right ... >>> {
+    using type = unit <
+        SameEnum,
+        typename substract<
+        static_vector<Left ... >,
+        static_vector<Right ... >
+        >::type
+    >;
+};
+template<typename Head, typename ... Tail>
+struct add_all
+{};
+
+
+template<typename LastLeft, typename LastRight>
+struct add_all<LastLeft, LastRight>
 {
-    using type = unit < TUnit, typename added<static_vector<Right ... >, static_vector<Right ... >>::type>;
+    using type = typename unit_add<LastLeft, LastRight>::type;
 };
 
-template<typename TUnit1, TUnit1 TEnum, typename TUnit2, TUnit2 TEnum>
-struct add_two{
-
+template<typename LeftUnit, typename RightUnit, typename ... Tail>
+struct add_all<LeftUnit, RightUnit, Tail ...> 
+{
+private:
+    using SumHead = typename unit_add<LeftUnit, RightUnit>::type;
+public:
+    using type = typename add_all<SumHead, Tail ...>::type;
 };
-template<typename TUnitLeft, typename TUnitRight>
-using added_units = typename unit_added<TUnitLeft, TUnitRight>::type;
+
+
+
+template <typename TFirstUnit, typename ... TOtherUnits>
+using multiplied_unit = typename add_all<TFirstUnit, TOtherUnits ...>::type;
+
+template <typename TDividendUnit, typename TDivisorUnit>
+using divided_unit = typename unit_substract<TDividendUnit, TDivisorUnit>::type ;
 
 /*template<typename LeftVector, typename RightVector, typename ResultVector>
 struct sum 

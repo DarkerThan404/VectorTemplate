@@ -24,16 +24,17 @@ using kelvin = basic_unit<si_units, si_units::kelvin>;
 using mole = basic_unit<si_units, si_units::mole>;
 using candela = basic_unit<si_units, si_units::candela>;
 
+using metre_per_second = divided_unit<metre, second>;
+using cubic_metre = multiplied_unit<metre, metre, metre>;
+
 int main()
 {
-    second s;
+    using r = unit_add<mole, mole>::type;
+    r re;
+    cubic_metre cb;
+    metre_per_second mps;
     metre m;
-    kilogram k;
-    ampere a;
-    kelvin kv;
-    mole mo;
-    candela c;
-    using r = added_units<mole, candela>;
+    second s;
     std::cout << "Hello World!\n";
 }
 
