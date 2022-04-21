@@ -69,6 +69,10 @@ struct added<static_vector<LeftValues ...>, static_vector<RightValues ... >> {
     using type = static_vector<(LeftValues + RightValues) ... >;
 };
 
+
+template<typename Unit>
+struct get_enum;
+
 template<typename TUnitLeft, typename TUnitRight>
 struct unit_added{};
 
