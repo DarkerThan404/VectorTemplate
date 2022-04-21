@@ -154,19 +154,19 @@ public:
     TValue value() { return value_; }
 };
 
-template<typename TMultiplier1, typename TMultiplier2>
-auto operator * (quantity<TMultiplier1> left, quantity<TMultiplier2> right) {
-    auto left = left.value();
-    auto right = right.value();
-    quantity < multiplied_unit<TMultiplier1, TMultiplier2>> result(left * right);
+template<typename TEnum, typename TPowersLeft, typename TPowersRight>
+auto operator * (quantity<unit<TEnum, TPowersLeft>> left, quantity<unit<TEnum, TPowersRight>> right) {
+    auto LeftValue_ = left.value();
+    auto RightValue_ = right.value();
+    quantity < multiplied_unit<unit<TEnum, TPowersLeft>, unit<TEnum, TPowersRight>>> result(LeftValue_ * RightValue_);
     return result;
 }
 
-template<typename TDividentUnit, typename TDivisorUnit>
-auto operator / (quantity<TDividentUnit> divident, quantity<TDivisorUnit> divisor) {
-    auto divident_value = divident.value();
-    auto divisor_value = divisor.value();
-    quantity < divided_unit<TDividentUnit, TDivisorUnit>> result(divident_value / divisor_value);
+template<typename TEnum, typename TDividentPowers, typename TDivisorPowers>
+auto operator / (quantity<unit<TEnum, TDividentPowers>> divident, quantity<unit<TEnum, TDivisorPowers>> divisor) {
+    auto DividentValue_ = divident.value();
+    auto DivisorValue_ = divisor.value();
+    quantity < divided_unit<unit<TEnum, TDividentPowers>, unit<TEnum, TDivisorPowers>>> result(DividentValue_ / DivisorValue_);
     return result;
 }
 

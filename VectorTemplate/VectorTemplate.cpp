@@ -32,7 +32,7 @@ int main()
     // It can't be possible to combine together units from different systems
     // (even with the same enum size)
 
-    /*std::cout << std::is_same<
+    std::cout << std::is_same<
         typename unit_traits<second>::enum_type,
         typename unit_traits<metre>::enum_type
     >::value << std::endl;
@@ -54,7 +54,7 @@ int main()
     
     std::cout << is_addable<quantity<czk>, quantity<second>>::value << std::endl;
     std::cout << is_subtractable<quantity<czk>, quantity<second>>::value << std::endl;
-    std::cout << is_multipliable<quantity<czk>, quantity<second>>::value << std::endl;*/
+    std::cout << is_multipliable<quantity<czk>, quantity<second>>::value << std::endl;
     std::cout << is_divisible<quantity<czk>, quantity<second>>::value << std::endl;
 }
 
