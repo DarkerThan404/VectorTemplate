@@ -60,7 +60,27 @@ template<typename TEnum, TEnum index>
 using basic_unit = unit < TEnum, typename expanding_vector < static_vector<>, static_cast<int>(TEnum::_count), (int)index>::type >;
 
 
-template<typename LeftVector, typename RightVector, typename ResultVector>
+
+template<typename LeftVector, typename RightVector>
+struct added;
+
+template<int ... LeftValues, int ... RightValues>
+struct added<static_vector<LeftValues ...>, static_vector<RightValues ... >> {
+    using type = static_vector<(LeftValues + RightValues) ... >;
+};
+
+template<typename TUnitLeft, typename TUnitRight>
+struct unit_added {};
+
+template<typename TUnit, int ... rf>
+struct unit_added<TUnit, static_vector<rf...>>
+{
+    using type = unit < TUnit, typename added_t<static_vector<lf ... >, static_vector<rf ... >>::type>;
+};
+template<typename TUnitLeft, typename TUnitRight>
+using added_units = typename unit_added<TUnitLeft, TUnitRight>::type;
+
+/*template<typename LeftVector, typename RightVector, typename ResultVector>
 struct sum 
 {};
 
@@ -73,4 +93,4 @@ private:
     static constexpr auto right_value = Head2;
 public:
     using type = typename sum<static_vector<Values1 ...>, static_vector<Values2 ... >, typename push_back<static_vector<Values3 ...>, static_cast<int>(left_value + right_value)>::type >::type;
-};
+};*/

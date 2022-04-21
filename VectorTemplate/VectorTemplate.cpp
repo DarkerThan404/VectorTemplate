@@ -33,7 +33,7 @@ int main()
     kelvin kv;
     mole mo;
     candela c;
-    sum<second, metre, static_vector<>> summ;
+    //using r = added_t<mole, candela>::type;
     std::cout << "Hello World!\n";
 }
 
